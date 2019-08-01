@@ -178,17 +178,6 @@ def startSoundThread(textToSay):
             print(textToSay)
         start_new_thread(sayText,(textToSay,))  #startThread
 
-def stopProgramm():
-    # Clean up
-    
-    fps.stop()
-    print('[INFO] elapsed time (total): {:.2f}'.format(fps.elapsed()))
-    print('[INFO] approx. FPS: {:.2f}'.format(fps.fps()))
-
-    video_capture.stop()
-    cv2.destroyAllWindows()
-    exit()
-
 
 ######################################## actions 
 #exampels
@@ -198,7 +187,7 @@ def stopProgramm():
 #ctypes.windll.user32.LockWorkStation()     #Lock station
 #trigger(0xAD)                              #mute system
 #shell.Run('cmd')                           #run cmd
-#stopProgramm()                             #stop programm and close window
+#end = 1                                    #stop programm and close window
 #screenshot = 1                             #take a screenshot
 
 def actionAtPeace0():
@@ -275,8 +264,9 @@ def actionAtThumbsDown4():
 
 def actionAtThumbsDown5():
     global pause
+    global end
     pause = PAUSE_TIME
-    #stopProgramm()
+    startSoundThread("Schicht im Schacht")
     end = 1
 
 def actionATOk():
