@@ -229,9 +229,7 @@ def actionAtThumbsUp():
     global pause
     pause = PAUSE_TIME
     startSoundThread("Mute System")
-    time.sleep(1.5)
     trigger(0xAD) 
-    startSoundThread("Mute System")
 
 def actionAtThumbsDown():
     global muteSound
@@ -552,10 +550,14 @@ if __name__ == '__main__':
             if args.stream_out:
                 print('Streaming elsewhere!')
             else:
-                cv2.line(frame,(0,frame.shape[0]-10),(int(frame.shape[1]*(detectioncounter/TRIGGER_TIME)),frame.shape[0]-10),(0,255,0),6)
-                cv2.line(frame,(0,frame.shape[0]-3),(int(frame.shape[1]*(emptyframecounter/RESET_TIME)),frame.shape[0]-3),(0,0,255),6)
-                cv2.line(frame,(0,frame.shape[0]-17),(int(frame.shape[1]*(pause/PAUSE_TIME)),frame.shape[0]-17),(0,255,255),6)
-                cv2.putText(frame,generateDetectionString(),(0,frame.shape[0]-25), font, 1,(0,255,0),2,cv2.LINE_AA)
+                cv2.line(frame,(50,frame.shape[0]-10),(int((frame.shape[1])*(detectioncounter/TRIGGER_TIME))+50,frame.shape[0]-10),(0,255,0),6)
+                cv2.line(frame,(50,frame.shape[0]-3),(int((frame.shape[1])*(emptyframecounter/RESET_TIME))+50,frame.shape[0]-3),(0,0,255),6)
+                cv2.line(frame,(50,frame.shape[0]-17),(int((frame.shape[1])*(pause/PAUSE_TIME))+50,frame.shape[0]-17),(0,255,255),6)
+                cv2.putText(frame,"triggerTime",(0,frame.shape[0]-10), font, 0.23,(0,255,0),1,cv2.LINE_AA)
+                cv2.putText(frame,"resetTiem",(0,frame.shape[0]-3), font, 0.23,(0,0,255),1,cv2.LINE_AA)
+                cv2.putText(frame,"pauseTime",(0,frame.shape[0]-17), font, 0.23,(0,255,255),1,cv2.LINE_AA)
+                
+                cv2.putText(frame,generateDetectionString(),(0,frame.shape[0]-25), font, 1,(0,255,0),1,cv2.LINE_AA)
                 cv2.putText(frame, ("Loud" if muteSound != 0 else "Mute"),(5,25), font, 1,(0,255,0),2,cv2.LINE_AA)
                 cv2.putText(frame, calcFPS() ,(frame.shape[1]-150,25), font, 1,(0,255,0),2,cv2.LINE_AA)
                 cv2.imshow('Video', frame)
