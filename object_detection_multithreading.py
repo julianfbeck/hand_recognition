@@ -27,7 +27,7 @@ PATH_TO_CKPT = os.path.join(CWD_PATH, 'object_detection', 'model', 'frozen_infer
 PATH_TO_LABELS = os.path.join(CWD_PATH, 'object_detection', 'label', 'label_map.pbtxt')
 
 NUM_CLASSES = 11
-MIN_THRESHOLD = 0.95
+MIN_THRESHOLD = 0.90
 
 #Counts the objects [Counter, was it seen bevore]
 objectCounter = [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]
@@ -40,6 +40,9 @@ resetTime = 5
 
 #mute speach output
 muteSound = 1
+
+#how often the object have to appeare in the timeslot to trigger
+MIN_APPERANCE_IN_TIMESLOT = 5
 
 ##############################################################Trigger stuff
 speaker = win32com.client.Dispatch("SAPI.SpVoice")
@@ -265,7 +268,7 @@ def countObjects(objectList):
 def evaluateObjectcounter():
     actionlist = []
     for i in range(0,11):
-        if objectCounter[i][0] > 6:  
+        if objectCounter[i][0] > MIN_APPERANCE_IN_TIMESLOT:  
             actionlist.append(i)          
         objectCounter[i][0] = 0
     
@@ -321,7 +324,7 @@ def evaluateObjectcounter():
         elif i == 6:
             actionATOk()
         elif i == 9:
-            actionAtThumbsDown()
+            actionAtThumbsUp()
         else:
             print("error _ Nonesens or Argument",i)
 
