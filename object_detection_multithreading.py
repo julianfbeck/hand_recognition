@@ -48,6 +48,9 @@ MIN_APPERANCE_IN_TIMESLOT = 5
 PAUSE_TIME = 50
 pause = 0
 
+#take a picture wehen 1
+screenshot = 0
+
 ##############################################################Trigger stuff
 speaker = win32com.client.Dispatch("SAPI.SpVoice")
 shell = win32com.client.Dispatch("WScript.Shell")
@@ -187,7 +190,8 @@ def stopProgramm():
 #ctypes.windll.user32.LockWorkStation()     #Lock station
 #trigger(0xAD)                              #mute system
 #shell.Run('cmd')                           #run cmd
-#stopProgramm()                             #stop programm and close window   
+#stopProgramm()                             #stop programm and close window
+#screenshot = 1                             #take a screenshot
 
 def actionAtPeace0():
     global pause
@@ -233,6 +237,7 @@ def actionAtThumbsUp():
 
 def actionAtThumbsDown():
     global muteSound
+    global screenshot
     global pause
     pause = PAUSE_TIME
     if muteSound == 1:
@@ -241,6 +246,7 @@ def actionAtThumbsDown():
     else:
         muteSound = 1
         startSoundThread("Sprachausgabe Aktiviert")
+    screenshot = 1 
 
 def actionATOk():
     global pause
@@ -561,6 +567,11 @@ if __name__ == '__main__':
                 cv2.putText(frame, ("Loud" if muteSound != 0 else "Mute"),(5,25), font, 1,(0,255,0),2,cv2.LINE_AA)
                 cv2.putText(frame, calcFPS() ,(frame.shape[1]-150,25), font, 1,(0,255,0),2,cv2.LINE_AA)
                 cv2.imshow('Video', frame)
+                if screenshot == 1:
+                    print(datetime.datetime.now())
+                    cv2.imwrite('imgtest'+str(time.time())+'.jpg', frame)
+                    screenshot = 0
+
 
         fps.update()
 
