@@ -187,31 +187,31 @@ def stopProgramm():
 
 def actionAtPeace0():
     startSoundThread("Lautstärke auf 0")
-    #volumeToPercent(0)
+    volumeToPercent(0)
 
 def actionAtPeace1():
     startSoundThread("Lautstärke auf 20")
-    #volumeToPercent(20)
+    volumeToPercent(20)
 
 def actionAtPeace2():
     startSoundThread("Lautstärke auf 40")
-    #volumeToPercent(40)
+    volumeToPercent(40)
 
 def actionAtPeace3():
     startSoundThread("Lautstärke auf 60")
-    #volumeToPercent(60)
+    volumeToPercent(60)
 
 def actionAtPeace4():
     startSoundThread("Lautstärke auf 80")
-    #volumeToPercent(80)
+    volumeToPercent(80)
 
 def actionAtPeace5():
     startSoundThread("Lautstärke auf 100")
-    #volumeToPercent(101)
+    volumeToPercent(101)
 
 def actionAtThumbsUp():
     startSoundThread("Rechner sperren")
-    #ctypes.windll.user32.LockWorkStation()
+    ctypes.windll.user32.LockWorkStation()
 
 def actionAtThumbsDown():
     global muteSound
@@ -224,31 +224,31 @@ def actionAtThumbsDown():
 
 def actionATOk():
     startSoundThread("Desktop wird angezeigt")
-    #combitrigger(0x5B, 0x44)        #Windows+D
+    combitrigger(0x5B, 0x44)        #Windows+D
 
 def actionAtStop0():
     startSoundThread("Explorer wird geöffnet")
-    #shell.Run('Explorer')
+    shell.Run('Explorer')
 
 def actionAtStop1():
     startSoundThread("Konsole wird geöffnet")
-    #shell.Run('cmd')
+    shell.Run('cmd')
 
 def actionAtStop2():
     startSoundThread("firefox wird geöffnet")
-    #shell.Run('firefox')
+    shell.Run('firefox')
 
 def actionAtStop3():
     startSoundThread("code-inseiders wird geöffnet")
-    #shell.Run('code-inseiders')
+    shell.Run('code-inseiders')
 
 def actionAtStop4():
     startSoundThread("hs-karlsruhe.de wird geöffnet")
-    #shell.Run('start https://www.hs-karlsruhe.de')
+    shell.Run('firefox https://www.hs-karlsruhe.de')
 
 def actionAtStop5():
     startSoundThread("webmail.hs-karlsruhe.de wird geöffnet")
-    #shell.Run('start https://webmail.hs-karlsruhe.de')
+    shell.Run('firefox https://webmail.hs-karlsruhe.de')
 
 ####################################################################################
 
