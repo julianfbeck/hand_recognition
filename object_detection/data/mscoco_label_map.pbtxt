@@ -1,0 +1,44 @@
+item {
+	name: 'Zahl 2'
+	id: 1
+}
+item {
+	name: 'Stopp Zeichen'
+	id: 2
+}
+item {
+	name: 'Peace Zeichen'
+	id: 3
+}
+item {
+	name: 'Zahl 3'
+	id: 4
+}
+item {
+	name: 'Daumen runter'
+	id: 5
+}
+item {
+	name: 'OK Zeichen'
+	id: 6
+}
+item {
+	name: 'Zahl 1'
+	id: 7
+}
+item {
+	name: 'Zahl 0'
+	id: 8
+}
+item {
+	name: 'Daumen hoch'
+	id: 9
+}
+item {
+	name: 'Zahl 5'
+	id: 10
+}
+item {
+	name: 'Zahl 4'
+	id: 11
+}
