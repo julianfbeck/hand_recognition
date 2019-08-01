@@ -33,16 +33,20 @@ MIN_THRESHOLD = 0.90
 objectCounter = [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]
 
 #Time which the Object has to be seen
-triggerTime = 10
+TRIGGER_TIME = 10
 
 #when no object appered in this time, the counter will be reset
-resetTime = 5
+RESET_TIME = 5
 
 #mute speach output
 muteSound = 1
 
 #how often the object have to appeare in the timeslot to trigger
 MIN_APPERANCE_IN_TIMESLOT = 5
+
+#time inbetween actions
+PAUSE_TIME = 50
+pause = 0
 
 ##############################################################Trigger stuff
 speaker = win32com.client.Dispatch("SAPI.SpVoice")
@@ -186,35 +190,53 @@ def stopProgramm():
 #stopProgramm()                             #stop programm and close window   
 
 def actionAtPeace0():
+    global pause
+    pause = PAUSE_TIME
     startSoundThread("Lautstärke auf 0")
     volumeToPercent(0)
 
 def actionAtPeace1():
+    global pause
+    pause = PAUSE_TIME
     startSoundThread("Lautstärke auf 20")
     volumeToPercent(20)
 
 def actionAtPeace2():
+    global pause
+    pause = PAUSE_TIME
     startSoundThread("Lautstärke auf 40")
     volumeToPercent(40)
 
 def actionAtPeace3():
+    global pause
+    pause = PAUSE_TIME
     startSoundThread("Lautstärke auf 60")
     volumeToPercent(60)
 
 def actionAtPeace4():
+    global pause
+    pause = PAUSE_TIME
     startSoundThread("Lautstärke auf 80")
     volumeToPercent(80)
 
 def actionAtPeace5():
+    global pause
+    pause = PAUSE_TIME
     startSoundThread("Lautstärke auf 100")
     volumeToPercent(101)
 
 def actionAtThumbsUp():
-    startSoundThread("Rechner sperren")
-    ctypes.windll.user32.LockWorkStation()
+    global pause
+    pause = PAUSE_TIME
+    startSoundThread("Mute System")
+    time.sleep(1.5)
+    trigger(0xAD) 
+    startSoundThread("Mute System")
 
 def actionAtThumbsDown():
     global muteSound
+    global pause
+    pause = PAUSE_TIME
     if muteSound == 1:
         startSoundThread("Sprachausgabe Deaktiviert")
         muteSound = 0
@@ -223,30 +245,44 @@ def actionAtThumbsDown():
         startSoundThread("Sprachausgabe Aktiviert")
 
 def actionATOk():
+    global pause
+    pause = PAUSE_TIME
     startSoundThread("Desktop wird angezeigt")
     combitrigger(0x5B, 0x44)        #Windows+D
 
 def actionAtStop0():
+    global pause
+    pause = PAUSE_TIME
     startSoundThread("Explorer wird geöffnet")
     shell.Run('Explorer')
 
 def actionAtStop1():
+    global pause
+    pause = PAUSE_TIME
     startSoundThread("Konsole wird geöffnet")
     shell.Run('cmd')
 
 def actionAtStop2():
+    global pause
+    pause = PAUSE_TIME
     startSoundThread("firefox wird geöffnet")
     shell.Run('firefox')
 
 def actionAtStop3():
+    global pause
+    pause = PAUSE_TIME
     startSoundThread("code-inseiders wird geöffnet")
     shell.Run('code-inseiders')
 
 def actionAtStop4():
+    global pause
+    pause = PAUSE_TIME
     startSoundThread("hs-karlsruhe.de wird geöffnet")
     shell.Run('firefox https://www.hs-karlsruhe.de')
 
 def actionAtStop5():
+    global pause
+    pause = PAUSE_TIME
     startSoundThread("webmail.hs-karlsruhe.de wird geöffnet")
     shell.Run('firefox https://webmail.hs-karlsruhe.de')
 
@@ -272,6 +308,7 @@ def evaluateObjectcounter():
             actionlist.append(i)        
         objectCounter[i][0] = 0
     
+
     if 2 in actionlist:             #Stop
         actionlist.remove(2)
         if 1 in actionlist:         #zahl 2
@@ -377,6 +414,7 @@ emptyframecounter = 0 #count empty frames
 def detect_objects(image_np, sess, detection_graph):
     global detectioncounter
     global emptyframecounter
+    global pause
     # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
     image_np_expanded = np.expand_dims(image_np, axis=0)
     image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
@@ -405,21 +443,24 @@ def detect_objects(image_np, sess, detection_graph):
     # also detectioncounter is counted up. If this 10 was overruled, we got the object counter.
     #If no object is selected and it expires
     #the objectCounter and detectioncounter are set to 0.
-    if len(bigger_than_threshold) != 0 :
-        countObjects(bigger_than_threshold)
-        detectioncounter += 1
-        emptyframecounter = 0
-        if detectioncounter > triggerTime:
-            evaluateObjectcounter()
-            detectioncounter = 0
-
+    if pause > 0:
+        pause -= 1
     else:
-        emptyframecounter+=1
-        if emptyframecounter > resetTime:
-            for i in range(0,11):
-                objectCounter[i][0] = 0
-            detectioncounter = 0
+        if len(bigger_than_threshold) != 0 :
+            countObjects(bigger_than_threshold)
+            detectioncounter += 1
             emptyframecounter = 0
+            if detectioncounter > TRIGGER_TIME:
+                evaluateObjectcounter()
+                detectioncounter = 0
+
+        else:
+            emptyframecounter+=1
+            if emptyframecounter > RESET_TIME:
+                for i in range(0,11):
+                    objectCounter[i][0] = 0
+                detectioncounter = 0
+                emptyframecounter = 0
 
 
     # Visualization of the results of a detection.
@@ -486,6 +527,7 @@ if __name__ == '__main__':
     fps = FPS().start()
 
     while True:
+        
         frame = video_capture.read()
         input_q.put(frame)
 
@@ -510,9 +552,10 @@ if __name__ == '__main__':
             if args.stream_out:
                 print('Streaming elsewhere!')
             else:
-                cv2.line(frame,(0,frame.shape[0]-10),(int(frame.shape[1]*(detectioncounter/triggerTime)),frame.shape[0]-10),(0,255,0),6)
-                cv2.line(frame,(0,frame.shape[0]-3),(int(frame.shape[1]*(emptyframecounter/resetTime)),frame.shape[0]-3),(0,0,255),6)
-                cv2.putText(frame,generateDetectionString(),(0,frame.shape[0]-20), font, 1,(0,255,0),2,cv2.LINE_AA)
+                cv2.line(frame,(0,frame.shape[0]-10),(int(frame.shape[1]*(detectioncounter/TRIGGER_TIME)),frame.shape[0]-10),(0,255,0),6)
+                cv2.line(frame,(0,frame.shape[0]-3),(int(frame.shape[1]*(emptyframecounter/RESET_TIME)),frame.shape[0]-3),(0,0,255),6)
+                cv2.line(frame,(0,frame.shape[0]-17),(int(frame.shape[1]*(pause/PAUSE_TIME)),frame.shape[0]-17),(0,255,255),6)
+                cv2.putText(frame,generateDetectionString(),(0,frame.shape[0]-25), font, 1,(0,255,0),2,cv2.LINE_AA)
                 cv2.putText(frame, ("Loud" if muteSound != 0 else "Mute"),(5,25), font, 1,(0,255,0),2,cv2.LINE_AA)
                 cv2.putText(frame, calcFPS() ,(frame.shape[1]-150,25), font, 1,(0,255,0),2,cv2.LINE_AA)
                 cv2.imshow('Video', frame)
