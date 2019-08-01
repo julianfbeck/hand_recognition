@@ -255,7 +255,7 @@ def actionAtStop5():
 #count Objects by frame. Each object will be only 
 #count once also if it occures multible times in the frame
 def countObjects(objectList):
-    for i in range(0,11):
+    for i in range(0,NUM_CLASSES+1):
         objectCounter[i][1] = 0
 
     for obj in objectList:
@@ -267,9 +267,9 @@ def countObjects(objectList):
 #check if the object was more then 6 times in the frame in one timeslot
 def evaluateObjectcounter():
     actionlist = []
-    for i in range(0,11):
+    for i in range(0,NUM_CLASSES+1):
         if objectCounter[i][0] > MIN_APPERANCE_IN_TIMESLOT:  
-            actionlist.append(i)          
+            actionlist.append(i)        
         objectCounter[i][0] = 0
     
     if 2 in actionlist:             #Stop
