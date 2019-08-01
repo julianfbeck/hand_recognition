@@ -13,7 +13,7 @@ from utils.app_utils import FPS, HLSVideoStream, WebcamVideoStream, draw_boxes_a
 from object_detection.utils import label_map_util
 from _thread import start_new_thread
 
-from keyboardTrigger import trigger, volumeToPercent, combiTrigger, sayText
+from system_action import trigger, volumeToPercent, combiTrigger, sayText
 
 CWD_PATH = os.getcwd()
 
@@ -68,6 +68,26 @@ def startSoundThread(textToSay):
     if muteSound == 1:
         start_new_thread(sayText,(textToSay,))  #startThread
 
+def setPauseTimer():
+    global pause
+    pause = PAUSE_TIME
+
+def takeScreenshot():
+    global screenshot
+    screenshot = 1
+
+def mudeSound():
+    global muteSound
+    if muteSound == 1:
+        startSoundThread("Sprachausgabe Deaktiviert")
+        muteSound = 0
+    else:
+        muteSound = 1
+        startSoundThread("Sprachausgabe Aktiviert")
+
+def endscript():
+    global end
+    end = 1
 
 ######################################## actions 
 #exampels
@@ -81,123 +101,95 @@ def startSoundThread(textToSay):
 #screenshot = 1                             #take a screenshot
 
 def actionAtPeace0():
-    global pause
-    pause = PAUSE_TIME
+    setPauseTimer()
     startSoundThread("Lautstärke auf 0")
     volumeToPercent(0)
 
 def actionAtPeace1():
-    global pause
-    pause = PAUSE_TIME
+    setPauseTimer()
     startSoundThread("Lautstärke auf 20")
     volumeToPercent(20)
 
 def actionAtPeace2():
-    global pause
-    pause = PAUSE_TIME
+    setPauseTimer()
     startSoundThread("Lautstärke auf 40")
     volumeToPercent(40)
 
 def actionAtPeace3():
-    global pause
-    pause = PAUSE_TIME
+    setPauseTimer()
     startSoundThread("Lautstärke auf 60")
     volumeToPercent(60)
 
 def actionAtPeace4():
-    global pause
-    pause = PAUSE_TIME
+    setPauseTimer()
     startSoundThread("Lautstärke auf 80")
     volumeToPercent(80)
 
 def actionAtPeace5():
-    global pause
-    pause = PAUSE_TIME
+    setPauseTimer()
     startSoundThread("Lautstärke auf 100")
     volumeToPercent(101)
 
 def actionAtThumbsUp():
-    global pause
-    pause = PAUSE_TIME
+    setPauseTimer()
     startSoundThread("Mute System")
     trigger(0xAD) 
 
 def actionAtThumbsDown0():
-    global pause
-    pause = PAUSE_TIME
-   
+    setPauseTimer()
+
 def actionAtThumbsDown1():
-    global pause
-    pause = PAUSE_TIME
-    global muteSound
-    if muteSound == 1:
-        startSoundThread("Sprachausgabe Deaktiviert")
-        muteSound = 0
-    else:
-        muteSound = 1
-        startSoundThread("Sprachausgabe Aktiviert")
+    setPauseTimer()
+    mudeSound()
 
 def actionAtThumbsDown2():
-    global pause
-    pause = PAUSE_TIME
+    setPauseTimer()
 
 def actionAtThumbsDown3():
-    global pause
-    pause = PAUSE_TIME
+    setPauseTimer()
 
 def actionAtThumbsDown4():
-    global pause
-    pause = PAUSE_TIME
-    global screenshot
-    screenshot = 1
+    setPauseTimer()
+    takeScreenshot()
     startSoundThread("Screenshot")
 
 def actionAtThumbsDown5():
-    global pause
-    global end
-    pause = PAUSE_TIME
+    setPauseTimer()
     startSoundThread("Schicht im Schacht")
-    end = 1
+    endscript()
 
 def actionATOk():
-    global pause
-    pause = PAUSE_TIME
+    setPauseTimer()
     startSoundThread("Desktop wird angezeigt")
     combiTrigger(0x5B, 0x44)        #Windows+D
 
 def actionAtStop0():
-    global pause
-    pause = PAUSE_TIME
+    setPauseTimer()
     startSoundThread("Explorer wird geöffnet")
     shell.Run('Explorer')
 
 def actionAtStop1():
-    global pause
-    pause = PAUSE_TIME
+    setPauseTimer()
     startSoundThread("Konsole wird geöffnet")
     shell.Run('cmd')
 
 def actionAtStop2():
-    global pause
-    pause = PAUSE_TIME
+    setPauseTimer()
     startSoundThread("firefox wird geöffnet")
     shell.Run('firefox')
 
 def actionAtStop3():
-    global pause
-    pause = PAUSE_TIME
+    setPauseTimer()
     startSoundThread("code-inseiders wird geöffnet")
     shell.Run('code-inseiders')
 
 def actionAtStop4():
-    global pause
-    pause = PAUSE_TIME
+    setPauseTimer()
     startSoundThread("hs-karlsruhe.de wird geöffnet")
     shell.Run('firefox https://www.hs-karlsruhe.de')
 
 def actionAtStop5():
-    global pause
-    pause = PAUSE_TIME
+    setPauseTimer()
     startSoundThread("webmail.hs-karlsruhe.de wird geöffnet")
     shell.Run('firefox https://webmail.hs-karlsruhe.de')
 
@@ -304,7 +296,7 @@ def generateDetectionString():
     counter = 0
     string = ""
     for obj in objectCounter:
-        if obj[0]>7:
+        if obj[0]>6:
             if counter == 1:
                 string += "2 "
             elif counter == 2:
