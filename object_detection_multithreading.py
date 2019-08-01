@@ -13,7 +13,7 @@ from utils.app_utils import FPS, HLSVideoStream, WebcamVideoStream, draw_boxes_a
 from object_detection.utils import label_map_util
 from _thread import start_new_thread
 
-from keyboardTrigger import trigger, volumeToPercent, combiTrigger
+from keyboardTrigger import trigger, volumeToPercent, combiTrigger, sayText
 
 CWD_PATH = os.getcwd()
 
@@ -66,9 +66,6 @@ def startSoundThread(textToSay):
     print(textToSay)
     #define Method wich will be started by the Thread
     if muteSound == 1:
-        def sayText(textToSay):
-            speaker.Speak(textToSay)
-            print(textToSay)
         start_new_thread(sayText,(textToSay,))  #startThread
 
 

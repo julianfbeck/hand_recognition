@@ -3,9 +3,6 @@ import ctypes
 from ctypes import wintypes
 import win32com.client
 
-
-
-
 ##############################################################Trigger stuff
 speaker = win32com.client.Dispatch("SAPI.SpVoice")
 shell = win32com.client.Dispatch("WScript.Shell")
@@ -109,3 +106,7 @@ def combiTrigger(key1, key2):
     PressKey(key2)
     ReleaseKey(key2)
     ReleaseKey(key1)
+
+def sayText(textToSay):
+    speaker.Speak(textToSay)
+    print(textToSay)
