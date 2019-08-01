@@ -366,8 +366,6 @@ def evaluateObjectcounter():
             actionATOk()
         elif i == 9:
             actionAtThumbsUp()
-        else:
-            print("error _ Nonesens or Argument",i)
 
 #generate String which contains all detected Objects by name
 def generateDetectionString():
@@ -556,19 +554,18 @@ if __name__ == '__main__':
             if args.stream_out:
                 print('Streaming elsewhere!')
             else:
-                cv2.line(frame,(50,frame.shape[0]-10),(int((frame.shape[1])*(detectioncounter/TRIGGER_TIME))+50,frame.shape[0]-10),(0,255,0),6)
-                cv2.line(frame,(50,frame.shape[0]-3),(int((frame.shape[1])*(emptyframecounter/RESET_TIME))+50,frame.shape[0]-3),(0,0,255),6)
-                cv2.line(frame,(50,frame.shape[0]-17),(int((frame.shape[1])*(pause/PAUSE_TIME))+50,frame.shape[0]-17),(0,255,255),6)
-                cv2.putText(frame,"triggerTime",(0,frame.shape[0]-10), font, 0.23,(0,255,0),1,cv2.LINE_AA)
-                cv2.putText(frame,"resetTiem",(0,frame.shape[0]-3), font, 0.23,(0,0,255),1,cv2.LINE_AA)
-                cv2.putText(frame,"pauseTime",(0,frame.shape[0]-17), font, 0.23,(0,255,255),1,cv2.LINE_AA)
+                cv2.line(   frame,(60,frame.shape[0]-5 ),(int((frame.shape[1]-60)*(emptyframecounter/RESET_TIME ))+60,frame.shape[0]-5 ),(0,0  ,255),10)
+                cv2.line(   frame,(60,frame.shape[0]-15),(int((frame.shape[1]-60)*(detectioncounter/TRIGGER_TIME))+60,frame.shape[0]-15),(0,255,0  ),10)
+                cv2.line(   frame,(60,frame.shape[0]-25),(int((frame.shape[1]-60)*(pause/PAUSE_TIME             ))+60,frame.shape[0]-25),(0,255,255),10)
+                cv2.putText(frame,"resetTime"                        ,(2,frame.shape[0]-5 ), font, 0.3,(0,0  ,255),1,cv2.LINE_AA)
+                cv2.putText(frame,"triggerTime"                        ,(2,frame.shape[0]-15), font, 0.3,(0,255,0  ),1,cv2.LINE_AA)
+                cv2.putText(frame,"pauseTime"                        ,(2,frame.shape[0]-25), font, 0.3,(0,255,255),1,cv2.LINE_AA)
                 
-                cv2.putText(frame,generateDetectionString(),(0,frame.shape[0]-25), font, 1,(0,255,0),1,cv2.LINE_AA)
-                cv2.putText(frame, ("Loud" if muteSound != 0 else "Mute"),(5,25), font, 1,(0,255,0),2,cv2.LINE_AA)
-                cv2.putText(frame, calcFPS() ,(frame.shape[1]-150,25), font, 1,(0,255,0),2,cv2.LINE_AA)
+                cv2.putText(frame,generateDetectionString()             ,(0,frame.shape[0]-25), font, 1,(0,255,0),1,cv2.LINE_AA)
+                cv2.putText(frame,("Loud" if muteSound != 0 else "Mute"),(5,25), font, 1,(0,255,0),2,cv2.LINE_AA)
+                cv2.putText(frame, calcFPS()                            ,(frame.shape[1]-150,25), font, 1,(0,255,0),2,cv2.LINE_AA)
                 cv2.imshow('Video', frame)
                 if screenshot == 1:
-                    print(datetime.datetime.now())
                     cv2.imwrite('imgtest'+str(time.time())+'.jpg', frame)
                     screenshot = 0
 
