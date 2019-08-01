@@ -51,6 +51,9 @@ pause = 0
 #take a picture wehen 1
 screenshot = 0
 
+#endscript
+end = 0
+
 ##############################################################Trigger stuff
 speaker = win32com.client.Dispatch("SAPI.SpVoice")
 shell = win32com.client.Dispatch("WScript.Shell")
@@ -177,7 +180,12 @@ def startSoundThread(textToSay):
 
 def stopProgramm():
     # Clean up
-    video.release()
+    
+    fps.stop()
+    print('[INFO] elapsed time (total): {:.2f}'.format(fps.elapsed()))
+    print('[INFO] approx. FPS: {:.2f}'.format(fps.fps()))
+
+    video_capture.stop()
     cv2.destroyAllWindows()
     exit()
 
@@ -235,18 +243,41 @@ def actionAtThumbsUp():
     startSoundThread("Mute System")
     trigger(0xAD) 
 
-def actionAtThumbsDown():
-    global muteSound
-    global screenshot
+def actionAtThumbsDown0():
     global pause
     pause = PAUSE_TIME
+   
+def actionAtThumbsDown1():
+    global pause
+    pause = PAUSE_TIME
+    global muteSound
     if muteSound == 1:
         startSoundThread("Sprachausgabe Deaktiviert")
         muteSound = 0
     else:
         muteSound = 1
         startSoundThread("Sprachausgabe Aktiviert")
-    screenshot = 1 
+
+def actionAtThumbsDown2():
+    global pause
+    pause = PAUSE_TIME
+
+def actionAtThumbsDown3():
+    global pause
+    pause = PAUSE_TIME
+
+def actionAtThumbsDown4():
+    global pause
+    pause = PAUSE_TIME
+    global screenshot
+    screenshot = 1
+    startSoundThread("Screenshot")
+
+def actionAtThumbsDown5():
+    global pause
+    pause = PAUSE_TIME
+    #stopProgramm()
+    end = 1
 
 def actionATOk():
     global pause
@@ -290,6 +321,7 @@ def actionAtStop5():
     startSoundThread("webmail.hs-karlsruhe.de wird geöffnet")
     shell.Run('firefox https://webmail.hs-karlsruhe.de')
 
+
 ####################################################################################
 
 #count Objects by frame. Each object will be only 
@@ -312,6 +344,28 @@ def evaluateObjectcounter():
             actionlist.append(i)        
         objectCounter[i][0] = 0
     
+    if 5 in actionlist:             #Stop
+        actionlist.remove(5)
+        if 1 in actionlist:         #zahl 2
+            actionlist.remove(1)
+            actionAtThumbsDown2()
+        elif 4 in actionlist:       #zahl 3
+            actionlist.remove(4)    
+            actionAtThumbsDown3()
+        elif 7 in actionlist:       #zahl 1
+            actionlist.remove(7)
+            actionAtThumbsDown1()
+        elif 8 in actionlist:       #zahl 0
+            actionlist.remove(8)
+            actionAtThumbsDown0()
+        elif 10 in actionlist:      #zahl 5
+            actionlist.remove(10)
+            actionAtThumbsDown5()
+        elif 11 in actionlist:      #zahl 4
+            actionlist.remove(11)
+            actionAtThumbsDown4()
+        else:
+            print("Error, no arguments")
 
     if 2 in actionlist:             #Stop
         actionlist.remove(2)
@@ -360,9 +414,7 @@ def evaluateObjectcounter():
             print("Error, no arguments")
     
     for i in actionlist:
-        if i == 5:
-            actionAtThumbsDown()
-        elif i == 6:
+        if i == 6:
             actionATOk()
         elif i == 9:
             actionAtThumbsUp()
@@ -404,7 +456,7 @@ time1 = time.process_time()#used to calculate fps
 def calcFPS():
     global time1
     time2 = time.process_time()
-    timerg = round(1/(time2-time1),2)
+    timerg = round(1/(time2-time1+0.00001),2)
     time1 = time2
     return str(timerg) + " FPS"
 
@@ -560,7 +612,6 @@ if __name__ == '__main__':
                 cv2.putText(frame,"resetTime"                        ,(2,frame.shape[0]-5 ), font, 0.3,(0,0  ,255),1,cv2.LINE_AA)
                 cv2.putText(frame,"triggerTime"                        ,(2,frame.shape[0]-15), font, 0.3,(0,255,0  ),1,cv2.LINE_AA)
                 cv2.putText(frame,"pauseTime"                        ,(2,frame.shape[0]-25), font, 0.3,(0,255,255),1,cv2.LINE_AA)
-                
                 cv2.putText(frame,generateDetectionString()             ,(0,frame.shape[0]-25), font, 1,(0,255,0),1,cv2.LINE_AA)
                 cv2.putText(frame,("Loud" if muteSound != 0 else "Mute"),(5,25), font, 1,(0,255,0),2,cv2.LINE_AA)
                 cv2.putText(frame, calcFPS()                            ,(frame.shape[1]-150,25), font, 1,(0,255,0),2,cv2.LINE_AA)
@@ -577,7 +628,7 @@ if __name__ == '__main__':
 
         #print('[INFO] elapsed time: {:.2f}'.format(time.time() - t))
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        if (cv2.waitKey(1) & 0xFF == ord('q')) | end == 1:
             break
 
     fps.stop()
