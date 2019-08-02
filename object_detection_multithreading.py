@@ -459,6 +459,7 @@ if __name__ == '__main__':
     while True:
         
         frame = video_capture.read()
+        frame = cv2.flip(frame,1)
         input_q.put(frame)
 
         t = time.time()
