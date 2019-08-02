@@ -110,3 +110,6 @@ def combiTrigger(key1, key2):
 def sayText(textToSay):
     speaker.Speak(textToSay)
     print(textToSay)
+
+def openProgramm(command):
+    shell.Run(command)

@@ -13,7 +13,7 @@ from utils.app_utils import FPS, HLSVideoStream, WebcamVideoStream, draw_boxes_a
 from object_detection.utils import label_map_util
 from _thread import start_new_thread
 
-from system_action import trigger, volumeToPercent, combiTrigger, sayText
+from system_action import trigger, volumeToPercent, combiTrigger, sayText, openProgramm
 
 CWD_PATH = os.getcwd()
 
@@ -35,11 +35,12 @@ TRIGGER_TIME = 10
 #when no object appered in this time, the counter will be reset
 RESET_TIME = 5
 
+#appearence in Percent to trigger action
+PERCENT_TRIGGER = 0.5
+
+
 #mute speach output
 muteSound = 1
-
-#how often the object have to appeare in the timeslot to trigger
-MIN_APPERANCE_IN_TIMESLOT = 5
 
 #time inbetween actions
 PAUSE_TIME = 50
@@ -96,7 +97,7 @@ def endscript():
 #volumeToPercent(20)                        #Volume to 20 Percent
 #ctypes.windll.user32.LockWorkStation()     #Lock station
 #trigger(0xAD)                              #mute system
-#shell.Run('cmd')                           #run cmd
+#openProgramm('cmd')                           #run cmd
 #end = 1                                    #stop programm and close window
 #screenshot = 1                             #take a screenshot
 
@@ -166,32 +167,32 @@ def actionATOk():
 def actionAtStop0():
     setPauseTimer()
     startSoundThread("Explorer wird geöffnet")
-    shell.Run('Explorer')
+    openProgramm('Explorer')
 
 def actionAtStop1():
     setPauseTimer()
     startSoundThread("Konsole wird geöffnet")
-    shell.Run('cmd')
+    openProgramm('cmd')
 
 def actionAtStop2():
     setPauseTimer()
     startSoundThread("firefox wird geöffnet")
-    shell.Run('firefox')
+    openProgramm('firefox')
 
 def actionAtStop3():
     setPauseTimer()
     startSoundThread("code-inseiders wird geöffnet")
-    shell.Run('code-inseiders')
+    openProgramm('code-inseiders')
 
 def actionAtStop4():
     setPauseTimer()
     startSoundThread("hs-karlsruhe.de wird geöffnet")
-    shell.Run('firefox https://www.hs-karlsruhe.de')
+    openProgramm('firefox https://www.hs-karlsruhe.de')
 
 def actionAtStop5():
     setPauseTimer()
     startSoundThread("webmail.hs-karlsruhe.de wird geöffnet")
-    shell.Run('firefox https://webmail.hs-karlsruhe.de')
+    openProgramm('firefox https://webmail.hs-karlsruhe.de')
 
 
 ####################################################################################
@@ -212,7 +213,7 @@ def countObjects(objectList):
 def evaluateObjectcounter():
     actionlist = []
     for i in range(0,NUM_CLASSES+1):
-        if objectCounter[i][0] > MIN_APPERANCE_IN_TIMESLOT:  
+        if objectCounter[i][0] > int(TRIGGER_TIME*PERCENT_TRIGGER):  
             actionlist.append(i)        
         objectCounter[i][0] = 0
     
