@@ -24,7 +24,7 @@ PATH_TO_CKPT = os.path.join(CWD_PATH, 'object_detection', 'model', 'frozen_infer
 PATH_TO_LABELS = os.path.join(CWD_PATH, 'object_detection', 'label', 'label_map.pbtxt')
 
 NUM_CLASSES = 11
-MIN_THRESHOLD = 0.90
+MIN_THRESHOLD = 0.70
 
 #Counts the objects [Counter, was it seen bevore]
 objectCounter = [[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]
@@ -36,7 +36,7 @@ TRIGGER_TIME = 10
 RESET_TIME = 5
 
 #appearence in Percent to trigger action
-PERCENT_TRIGGER = 0.5
+PERCENT_TRIGGER = 0.4
 
 
 #mute speach output
@@ -103,38 +103,41 @@ def endscript():
 
 def actionAtPeace0():
     setPauseTimer()
-    startSoundThread("Lautstärke auf 0")
     volumeToPercent(0)
+    startSoundThread("Lautstärke auf 0")
 
 def actionAtPeace1():
     setPauseTimer()
-    startSoundThread("Lautstärke auf 20")
     volumeToPercent(20)
+    startSoundThread("Lautstärke auf 20")
 
 def actionAtPeace2():
     setPauseTimer()
-    startSoundThread("Lautstärke auf 40")
     volumeToPercent(40)
+    startSoundThread("Lautstärke auf 40")
+    
 
 def actionAtPeace3():
     setPauseTimer()
-    startSoundThread("Lautstärke auf 60")
     volumeToPercent(60)
+    startSoundThread("Lautstärke auf 60")
+    
 
 def actionAtPeace4():
     setPauseTimer()
-    startSoundThread("Lautstärke auf 80")
     volumeToPercent(80)
+    startSoundThread("Lautstärke auf 80")
 
 def actionAtPeace5():
     setPauseTimer()
-    startSoundThread("Lautstärke auf 100")
     volumeToPercent(101)
+    startSoundThread("Lautstärke auf 100")
 
 def actionAtThumbsUp():
     setPauseTimer()
     startSoundThread("Mute System")
-    trigger(0xAD) 
+    trigger(0xAD)
+    startSoundThread("unmute System")
 
 def actionAtThumbsDown0():
     setPauseTimer()
@@ -181,8 +184,8 @@ def actionAtStop2():
 
 def actionAtStop3():
     setPauseTimer()
-    startSoundThread("code-inseiders wird geöffnet")
-    openProgramm('code-inseiders')
+    startSoundThread("code-insiders wird geöffnet")
+    openProgramm('code-insiders')
 
 def actionAtStop4():
     setPauseTimer()
@@ -396,7 +399,7 @@ def detect_objects(image_np, sess, detection_graph):
         classes=np.squeeze(classes).astype(np.int32),
         scores=np.squeeze(scores),
         category_index=category_index,
-        min_score_thresh=.5
+        min_score_thresh=MIN_THRESHOLD
     )
     return dict(rect_points=rect_points, class_names=class_names, class_colors=class_colors)
 
