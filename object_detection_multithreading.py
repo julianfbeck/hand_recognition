@@ -313,7 +313,7 @@ def generateDetectionString():
     counter = 0
     string = ""
     for obj in objectCounter:
-        if obj[0]>6:
+        if obj[0]>int(TRIGGER_TIME*PERCENT_TRIGGER):
             if counter == 1:
                 string += "2 "
             elif counter == 2:
