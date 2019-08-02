@@ -1,32 +1,20 @@
-# Object-Detector-App
+# Handpose regognition programmm
 
 A real-time object recognition application using [Google's TensorFlow Object Detection API](https://github.com/tensorflow/models/tree/master/research/object_detection) and [OpenCV](http://opencv.org/).
+This Repo is based on [datitran](https://github.com/datitran) [Object-Detector-App](https://github.com/datitran/object_detector_app).
+We trained our model on different hand poses using the [IBM cloud-annotation traing CLI](https://github.com/cloud-annotations/training)
+To trigger system action we used multiple poses.
 
 ## Getting Started
 1. `conda env create -f environment.yml`
-2. `python object_detection_app.py` / `python object_detection_multithreading.py`
-    Optional arguments (default value):
-    * Device index of the camera `--source=0`
-    * Width of the frames in the video stream `--width=480`
-    * Height of the frames in the video stream `--height=360`
-    * Number of workers `--num-workers=2`
-    * Size of the queue `--queue-size=5`
-    * Get video from HLS stream rather than webcam '--stream-input=http://somertmpserver.com/hls/live.m3u8'
-    * Send stream to livestreaming server '--stream-output=--stream=http://somertmpserver.com/hls/live.m3u8'
-
-## Tests
-```
-pytest -vs utils/
-```
+2. `python object_detection_multithreading.py`
+  
 
 ## Requirements
 - [Anaconda / Python 3.5](https://www.continuum.io/downloads)
 - [TensorFlow 1.2](https://www.tensorflow.org/)
 - [OpenCV 3.0](http://opencv.org/)
 
-## Notes
-- OpenCV 3.1 might crash on OSX after a while, so that's why I had to switch to version 3.0. See open issue and solution [here](https://github.com/opencv/opencv/issues/5874).
-- Moving the `.read()` part of the video stream in a multiple child processes did not work. However, it was possible to move it to a separate thread.
 
 ## Copyright
 
