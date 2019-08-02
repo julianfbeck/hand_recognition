@@ -107,9 +107,11 @@ def combiTrigger(key1, key2):
     ReleaseKey(key2)
     ReleaseKey(key1)
 
+#will generate speach from input Text
 def sayText(textToSay):
     speaker.Speak(textToSay)
     print(textToSay)
 
+#run command 
 def openProgram(command):
     shell.Run(command)

@@ -62,6 +62,7 @@ category_index = label_map_util.create_category_index(categories)
 
 ##########################################################################################################
 
+#plays sound
 def startSoundThread(textToSay):
     global muteSound
     print(textToSay)
@@ -69,14 +70,17 @@ def startSoundThread(textToSay):
     if muteSound == 1:
         start_new_thread(sayText,(textToSay,))  #startThread
 
+#set Time to pause action trigger
 def setPauseTimer():
     global pause
     pause = PAUSE_TIME
 
+#set variable to take a screenshot in the next frame
 def takeScreenshot():
     global screenshot
     screenshot = 1
 
+#mute the speach output
 def mudeSound():
     global muteSound
     if muteSound == 1:
@@ -86,6 +90,7 @@ def mudeSound():
         muteSound = 1
         startSoundThread("Sprachausgabe Aktiviert")
 
+#set fariable to force to end the script in the next frame
 def endscript():
     global end
     end = 1
@@ -115,13 +120,11 @@ def actionAtPeace2():
     setPauseTimer()
     volumeToPercent(40)
     startSoundThread("Lautstärke auf 40")
-    
 
 def actionAtPeace3():
     setPauseTimer()
     volumeToPercent(60)
     startSoundThread("Lautstärke auf 60")
-    
 
 def actionAtPeace4():
     setPauseTimer()
@@ -196,7 +199,6 @@ def actionAtStop5():
     startSoundThread("webmail.hs-karlsruhe.de wird geöffnet")
     openProgram('firefox https://webmail.hs-karlsruhe.de')
 
-
 ####################################################################################
 
 #count Objects by frame. Each object will be only 
@@ -219,7 +221,8 @@ def evaluateObjectcounter():
             actionlist.append(i)        
         objectCounter[i][0] = 0
     
-    if 5 in actionlist:             #Stop
+    #try to find argumentvalue for thumbsDown and activate function
+    if 5 in actionlist:             #thumbsDown
         actionlist.remove(5)
         if 1 in actionlist:         #zahl 2
             actionlist.remove(1)
@@ -242,6 +245,7 @@ def evaluateObjectcounter():
         else:
             print("Error, no arguments")
 
+    #try to find argumentvalue for stop and activate function
     if 2 in actionlist:             #Stop
         actionlist.remove(2)
         if 1 in actionlist:         #zahl 2
@@ -265,6 +269,7 @@ def evaluateObjectcounter():
         else:
             print("Error, no arguments")
 
+    #try to find peace for stop and activate function
     if 3 in actionlist:             #peace
         actionlist.remove(3)
         if 1 in actionlist:         #zahl 2
@@ -288,6 +293,7 @@ def evaluateObjectcounter():
         else:
             print("Error, no arguments")
     
+    #trigger functions for gesture without any arguments
     for i in actionlist:
         if i == 6:
             actionATOk()
@@ -363,8 +369,8 @@ def detect_objects(image_np, sess, detection_graph):
         feed_dict={image_tensor: image_np_expanded})
 
 
+    #comine results form cv to be processed later
     combined = list(map(lambda x, y, z: [float(x), float(y),z.tolist()], scores[0], classes[0], boxes[0]))
-    
     bigger_than_threshold = list(filter(lambda x: x[0] >= MIN_THRESHOLD, combined))
 
 
@@ -372,7 +378,7 @@ def detect_objects(image_np, sess, detection_graph):
     # also detectioncounter is counted up. If this 10 was overruled, we got the object counter.
     #If no object is selected and it expires
     #the objectCounter and detectioncounter are set to 0.
-    if pause > 0:
+    if pause > 0:   #pause detection
         pause -= 1
     else:
         if len(bigger_than_threshold) != 0 :
@@ -482,6 +488,7 @@ if __name__ == '__main__':
             if args.stream_out:
                 print('Streaming elsewhere!')
             else:
+                #draw time lines with text
                 cv2.line(   frame,(60,frame.shape[0]-5 ),(int((frame.shape[1]-60)*(emptyframecounter/RESET_TIME ))+60,frame.shape[0]-5 ),(0,0  ,255),10)
                 cv2.line(   frame,(60,frame.shape[0]-15),(int((frame.shape[1]-60)*(detectioncounter/TRIGGER_TIME))+60,frame.shape[0]-15),(0,255,0  ),10)
                 cv2.line(   frame,(60,frame.shape[0]-25),(int((frame.shape[1]-60)*(pause/PAUSE_TIME             ))+60,frame.shape[0]-25),(0,255,255),10)
@@ -489,6 +496,7 @@ if __name__ == '__main__':
                 cv2.putText(frame,"triggerTime"                        ,(2,frame.shape[0]-15), font, 0.3,(0,255,0  ),1,cv2.LINE_AA)
                 cv2.putText(frame,"pauseTime"                        ,(2,frame.shape[0]-25), font, 0.3,(0,255,255),1,cv2.LINE_AA)
                 cv2.putText(frame,generateDetectionString()             ,(0,frame.shape[0]-25), font, 1,(0,255,0),1,cv2.LINE_AA)
+                #draw extra inforamtion
                 cv2.putText(frame,("Loud" if muteSound != 0 else "Mute"),(5,25), font, 1,(0,255,0),2,cv2.LINE_AA)
                 cv2.putText(frame, calcFPS()                            ,(frame.shape[1]-150,25), font, 1,(0,255,0),2,cv2.LINE_AA)
                 cv2.imshow('Video', frame)
