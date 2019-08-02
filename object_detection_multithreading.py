@@ -52,6 +52,10 @@ screenshot = 0
 #endscript
 end = 0
 
+#if 1 print text
+argumentsMissing = 0
+MISSING_TIME = 20
+
 ############################################################################################################################
 
 # Loading label map
@@ -186,17 +190,17 @@ def actionAtStop2():
 
 def actionAtStop3():
     setPauseTimer()
-    startSoundThread("code-insiders wird geöffnet")
+    startSoundThread("code minus insiders wird geöffnet")
     openProgram('code-insiders')
 
 def actionAtStop4():
     setPauseTimer()
-    startSoundThread("hs-karlsruhe.de wird geöffnet")
+    startSoundThread("h s minus karlsruhe.de wird geöffnet")
     openProgram('firefox https://www.hs-karlsruhe.de')
 
 def actionAtStop5():
     setPauseTimer()
-    startSoundThread("webmail.hs-karlsruhe.de wird geöffnet")
+    startSoundThread("webmail. h s minus karlsruhe.de wird geöffnet")
     openProgram('firefox https://webmail.hs-karlsruhe.de')
 
 ####################################################################################
@@ -215,6 +219,7 @@ def countObjects(objectList):
 
 #check if the object was more then 6 times in the frame in one timeslot
 def evaluateObjectcounter():
+    global argumentsMissing
     actionlist = []
     for i in range(0,NUM_CLASSES+1):
         if objectCounter[i][0] > int(TRIGGER_TIME*PERCENT_TRIGGER):  
@@ -244,6 +249,7 @@ def evaluateObjectcounter():
             actionAtThumbsDown4()
         else:
             print("Error, no arguments")
+            argumentsMissing=MISSING_TIME
 
     #try to find argumentvalue for stop and activate function
     if 2 in actionlist:             #Stop
@@ -268,6 +274,7 @@ def evaluateObjectcounter():
             actionAtStop4()
         else:
             print("Error, no arguments")
+            argumentsMissing=MISSING_TIME
 
     #try to find peace for stop and activate function
     if 3 in actionlist:             #peace
@@ -292,6 +299,7 @@ def evaluateObjectcounter():
             actionAtPeace4()
         else:
             print("Error, no arguments")
+            argumentsMissing=MISSING_TIME
     
     #trigger functions for gesture without any arguments
     for i in actionlist:
@@ -495,10 +503,14 @@ if __name__ == '__main__':
                 cv2.putText(frame,"resetTime"                        ,(2,frame.shape[0]-5 ), font, 0.3,(0,0  ,255),1,cv2.LINE_AA)
                 cv2.putText(frame,"triggerTime"                        ,(2,frame.shape[0]-15), font, 0.3,(0,255,0  ),1,cv2.LINE_AA)
                 cv2.putText(frame,"pauseTime"                        ,(2,frame.shape[0]-25), font, 0.3,(0,255,255),1,cv2.LINE_AA)
-                cv2.putText(frame,generateDetectionString()             ,(0,frame.shape[0]-25), font, 1,(0,255,0),1,cv2.LINE_AA)
+                cv2.putText(frame,generateDetectionString()             ,(0,frame.shape[0]-35), font, 1,(0,255,0),1,cv2.LINE_AA)
                 #draw extra inforamtion
-                cv2.putText(frame,("Loud" if muteSound != 0 else "Mute"),(5,25), font, 1,(0,255,0),2,cv2.LINE_AA)
+                cv2.putText(frame,("Sound on" if muteSound != 0 else "Sound off"),(5,25), font, 1,(0,255,0),2,cv2.LINE_AA)
                 cv2.putText(frame, calcFPS()                            ,(frame.shape[1]-150,25), font, 1,(0,255,0),2,cv2.LINE_AA)
+                #display "Missing Argument" for MISSING_TIME frames
+                if argumentsMissing > 0:
+                    argumentsMissing -= 1
+                    cv2.putText(frame, "Missing Argument"                            ,(frame.shape[1]-250,frame.shape[0]-35), font, 1,(0,0,255),1,cv2.LINE_AA)
                 cv2.imshow('Video', frame)
                 if screenshot == 1:
                     cv2.imwrite('imgtest'+str(time.time())+'.jpg', frame)
