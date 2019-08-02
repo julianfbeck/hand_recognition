@@ -111,5 +111,5 @@ def sayText(textToSay):
     speaker.Speak(textToSay)
     print(textToSay)
 
-def openProgramm(command):
+def openProgram(command):
     shell.Run(command)

@@ -13,7 +13,7 @@ from utils.app_utils import FPS, HLSVideoStream, WebcamVideoStream, draw_boxes_a
 from object_detection.utils import label_map_util
 from _thread import start_new_thread
 
-from system_action import trigger, volumeToPercent, combiTrigger, sayText, openProgramm
+from system_action import trigger, volumeToPercent, combiTrigger, sayText, openProgram
 
 CWD_PATH = os.getcwd()
 
@@ -36,7 +36,7 @@ TRIGGER_TIME = 10
 RESET_TIME = 5
 
 #appearence in Percent to trigger action
-PERCENT_TRIGGER = 0.4
+PERCENT_TRIGGER = 0.6
 
 
 #mute speach output
@@ -135,9 +135,8 @@ def actionAtPeace5():
 
 def actionAtThumbsUp():
     setPauseTimer()
-    startSoundThread("Mute System")
+    startSoundThread("Mute Computer")
     trigger(0xAD)
-    startSoundThread("unmute System")
 
 def actionAtThumbsDown0():
     setPauseTimer()
@@ -170,32 +169,32 @@ def actionATOk():
 def actionAtStop0():
     setPauseTimer()
     startSoundThread("Explorer wird geöffnet")
-    openProgramm('Explorer')
+    openProgram('Explorer')
 
 def actionAtStop1():
     setPauseTimer()
     startSoundThread("Konsole wird geöffnet")
-    openProgramm('cmd')
+    openProgram('cmd')
 
 def actionAtStop2():
     setPauseTimer()
     startSoundThread("firefox wird geöffnet")
-    openProgramm('firefox')
+    openProgram('firefox')
 
 def actionAtStop3():
     setPauseTimer()
     startSoundThread("code-insiders wird geöffnet")
-    openProgramm('code-insiders')
+    openProgram('code-insiders')
 
 def actionAtStop4():
     setPauseTimer()
     startSoundThread("hs-karlsruhe.de wird geöffnet")
-    openProgramm('firefox https://www.hs-karlsruhe.de')
+    openProgram('firefox https://www.hs-karlsruhe.de')
 
 def actionAtStop5():
     setPauseTimer()
     startSoundThread("webmail.hs-karlsruhe.de wird geöffnet")
-    openProgramm('firefox https://webmail.hs-karlsruhe.de')
+    openProgram('firefox https://webmail.hs-karlsruhe.de')
 
 
 ####################################################################################
